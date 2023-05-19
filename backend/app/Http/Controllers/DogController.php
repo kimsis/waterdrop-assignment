@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -17,15 +18,15 @@ class DogController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response|Collection
+    public function index(): Response|LengthAwarePaginator
     {
-        $response = Dog::all();
+        $response = Dog::paginate(30);
         if(sizeof($response) == 0)
         {
             return response('', 204);
         }
 
-        return Dog::all();
+        return $response;
     }
 
     /**

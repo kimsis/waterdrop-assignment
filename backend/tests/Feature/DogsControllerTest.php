@@ -43,7 +43,7 @@ class DogsControllerTest extends TestCase
         $response = $this->getJsonRequest('api/listDogs');
 
         $response->assertStatus(200);
-        $this->assertCount(2, $response->json());
+        $this->assertCount(2, $response->json()['data']);
     }
 
     public function test_controller_saves_dog(): void
