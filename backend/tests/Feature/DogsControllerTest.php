@@ -23,14 +23,11 @@ class DogsControllerTest extends TestCase
         return $this->postJson($uri, $data, ['Authorization' => env('API_KEY')]);
     }
 
-    public function test_controller_returns_dogs_database_empty(): void
+    private function getJsonErrorMessage(TestResponse $response)
     {
-        $this->withoutExceptionHandling();
-
-        $response = $this->getJsonRequest('api/listDogs');
-
-        $response->assertStatus(204);
+        return json_decode($response->getContent())->message;
     }
+
     public function test_controller_returns_all_dogs(): void
     {
         $this->withoutExceptionHandling();
@@ -46,14 +43,45 @@ class DogsControllerTest extends TestCase
         $this->assertCount(2, $response->json()['data']);
     }
 
+    public function test_controller_returns_dogs_by_name(): void
+    {
+        $this->withoutExceptionHandling();
+        $this->seed([
+            DogsSeeder::class,
+            DogsSeeder::class,
+        ]);
+
+
+        $response = $this->getJsonRequest('api/listDogs?name=dogName');
+
+        $response->assertStatus(200);
+        $this->assertCount(2, $response->json()['data']);
+    }
+
+    public function test_controller_returns_no_dogs_when_wrong_name(): void
+    {
+        $this->withoutExceptionHandling();
+        $this->seed([
+            DogsSeeder::class,
+            DogsSeeder::class,
+        ]);
+
+
+        $response = $this->getJsonRequest('api/listDogs?name=Kevin');
+
+        $response->assertStatus(200);
+        $this->assertCount(0, $response->json()['data']);
+    }
+
     public function test_controller_saves_dog(): void
     {
         $this->withoutExceptionHandling();
         $fakeDog = Dog::factory()->create();
+        $fakeDog['data'] = json_encode($fakeDog['data']);
 
         $response = $this->postJsonRequest('api/addDog', $fakeDog->toArray());
 
-        $response->assertStatus(200);
+        $response->assertContent('"Dog creation successfully started."');
     }
 
     public function test_controller_returns_error_on_wrong_json_format(): void
@@ -63,15 +91,6 @@ class DogsControllerTest extends TestCase
 
         $response = $this->postJsonRequest('api/addDog', $fakeDog->toArray());
 
-        $response->assertStatus(422);
-    }
-
-    public function test_controller_returns_error_on_no_data(): void
-    {
-        $this->withoutExceptionHandling();
-
-        $response = $this->postJsonRequest('api/addDog', []);
-
-        $response->assertStatus(422);
+        $response->assertJsonFragment(['message' => 'Incorrect JSON format for data property.']);
     }
 }

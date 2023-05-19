@@ -21,11 +21,9 @@ class DogController extends Controller
     public function index(Request $request): Response|LengthAwarePaginator
     {
         $name = $request->input('name');
-        $response = $name
+        return $name
             ? Dog::where('data->name', 'like', '%'.$name.'%')->paginate(30)
             : Dog::paginate(30);
-
-        return $response;
     }
 
     /**
@@ -36,24 +34,22 @@ class DogController extends Controller
     {
         $data = $request->input('data');
         $decoded = json_decode($data, true);
-
         if(is_null($decoded))
         {
             $errorResponse = new ValidationErrorResponse();
             return response()
-                ->json($errorResponse->makeError('Incorrect JSON format for data property'))
+                ->json($errorResponse->makeError('Incorrect JSON format for data property.'))
                 ->setStatusCode(422);
         }
-        Validator::make([...$request->all(), ...$decoded], [
-            'data' => 'required',
+        Validator::make($decoded, [
             'name' => 'required',
         ])->validate();
 
         $input = ['data' => $decoded];
-
         AsyncModelSave::dispatch(Dog::class, $input);
+
         return response()
-            ->json('Dog creation successfully started')
+            ->json('Dog creation successfully started.')
             ->setStatusCode(200);
     }
 

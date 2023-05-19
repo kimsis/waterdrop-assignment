@@ -19,11 +19,11 @@ class DogFactory extends Factory
      */
     public function definition(): array
     {
-        $fakeData = new stdClass();
-        $fakeData->name = 'dogName'.rand();
-        $fakeData->breed = 'dogBreed'.rand();
         return [
-            'data' => json_encode($fakeData),
+            'data' => [
+                'name' => 'dogName'.rand(),
+                'breed' => 'dogBreed'.rand(),
+            ],
         ];
     }
 }
