@@ -18,13 +18,12 @@ class DogController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response|LengthAwarePaginator
+    public function index(Request $request): Response|LengthAwarePaginator
     {
-        $response = Dog::paginate(30);
-        if(sizeof($response) == 0)
-        {
-            return response('', 204);
-        }
+        $name = $request->input('name');
+        $response = $name
+            ? Dog::where('data->name', 'like', '%'.$name.'%')->paginate(30)
+            : Dog::paginate(30);
 
         return $response;
     }
@@ -50,7 +49,9 @@ class DogController extends Controller
             'name' => 'required',
         ])->validate();
 
-        AsyncModelSave::dispatch(Dog::class, $request->all());
+        $input = ['data' => $decoded];
+
+        AsyncModelSave::dispatch(Dog::class, $input);
         return response()
             ->json('Dog creation successfully started')
             ->setStatusCode(200);
