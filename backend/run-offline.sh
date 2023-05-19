@@ -1,20 +1,11 @@
 #!/bin/bash
-
-cd backend
-
-docker-compose down
-process_id=$!
-wait $process_id
-
-docker volume rm $(docker volume ls -q)
-process_id=$!
-wait $process_id
+cd backend || exit
 
 docker-compose up -d
 process_id=$!
 wait $process_id
 
-sleep 1
+sleep 2
 process_id=$!
 wait $process_id
 
@@ -31,3 +22,11 @@ process_id=$!
 wait $process_id
 
 php artisan serve
+
+docker-compose down
+process_id=$!
+wait $process_id
+
+docker volume rm $(docker volume ls -q)
+process_id=$!
+wait $process_id
