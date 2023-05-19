@@ -1,3 +1,6 @@
 /.idea/
 /waterdrop-assignment.iml
-/backend/docker-compose/
+/api/docker-compose/
+/docker-compose/nginx/
+/docker-compose/postgres/
+**/.env

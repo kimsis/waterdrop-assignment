@@ -1,56 +1,72 @@
 version: '3.8'
 services:
 
-  api:
-    build:
-      args:
-        user: root
-        uid: 999
-      context: ./backend/
-      dockerfile: Dockerfile
-    image: waterdrop
-    container_name: waterdrop-api
-    restart: unless-stopped
-    working_dir: /var/www/html
-    volumes:
-        - ./backend/:/var/www/html
-    ports:
-        - "9000:9000"
-    networks:
-        - waterdrop
-
   postgres:
     image: "postgres:alpine"
     restart: unless-stopped
     container_name: waterdrop-postgres
     environment:
-        POSTGRES_DB: ${DB_DATABASE}
-        POSTGRES_USER: ${DB_USERNAME}
-        POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-        - '5432:5432'
-    working_dir: /var/www/html
+      - '5432:5432'
+    working_dir: /var/www/html/api
     volumes:
-        - ./docker-compose/postgres:/docker-entrypoint-initdb.d
+      - ./docker-compose/postgres:/docker-entrypoint-initdb.d
     networks:
-        - waterdrop
+      - waterdrop
+
+  api:
+    build:
+      context: api/
+      dockerfile: ../docker-compose/Api.Dockerfile
+    image: waterdrop-api
+    container_name: waterdrop-api
+    restart: unless-stopped
+    working_dir: /var/www/html/api
+    volumes:
+      - ./api/:/var/www/html/api
+    ports:
+      - "9000:9000"
+    networks:
+      - waterdrop
 
   nginx:
+    user: root
     image: nginx:stable-alpine
     container_name: waterdrop-nginx
     restart: unless-stopped
     ports:
-      - '8080:80'
+      - '8000:80'
     working_dir: /var/www/html
     volumes:
-      - ./backend/:/var/www/html
+      - ./api/:/var/www/html/api
+      - ./site/:/var/www/html/site
       - ./docker-compose/nginx/waterdrop.conf:/etc/nginx/conf.d/default.conf:rw
       - ./docker-compose/nginx/logs:/var/nginx/logs:rw
     depends_on:
-        - api
-        - postgres
+      - api
+      - postgres
+      - site
     networks:
-      waterdrop:
+      -  waterdrop
+
+  site:
+    build:
+      context: ./site
+      dockerfile: ../docker-compose/Site.Dockerfile
+    image: waterdrop-site
+    container_name: waterdrop-site
+    restart: unless-stopped
+    working_dir: /var/www/html/site
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./site/:/var/www/html/site
+    command: /bin/sh -c "yarn dev"
+    networks:
+      - waterdrop
 
 networks:
   waterdrop:
