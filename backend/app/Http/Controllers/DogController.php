@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Jobs\AsyncModelSave;
 use App\Models\Dog;
 use App\Responses\ValidationErrorResponse;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -14,16 +17,12 @@ class DogController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Response|Collection
     {
         $response = Dog::all();
         if(sizeof($response) == 0)
         {
-            $errorResponse = new ValidationErrorResponse();
-
-            return response()
-                ->json('')
-                ->setStatusCode(204);
+            return response('', 204);
         }
 
         return Dog::all();
@@ -33,7 +32,7 @@ class DogController extends Controller
      * Store a newly created resource in storage.
      * @throws ValidationException
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $data = $request->input('data');
         $decoded = json_decode($data, true);
@@ -53,7 +52,7 @@ class DogController extends Controller
         AsyncModelSave::dispatch(Dog::class, $request->all());
         return response()
             ->json('Dog creation successfully started')
-            ->setStatusCode(202);
+            ->setStatusCode(200);
     }
 
     /**
