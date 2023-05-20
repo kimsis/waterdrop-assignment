@@ -8,7 +8,8 @@ RUN apk update && \
     zip \
     mc \
     htop \
-    curl
+    curl \
+    vim
 
 RUN apk add --no-cache libzip-dev
 
@@ -27,4 +28,4 @@ CMD composer update
 
 CMD php artisan migrate
 
-CMD php artisan serve
+CMD php artisan serve --port 9000
