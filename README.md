@@ -23,5 +23,12 @@ No additional setup should be required, as the docker containers equip themselve
 A secret key is used to authorize the api, being the very secure keyword 'secret_key'
 In the api, it is stored in the .env file, however in the fe it is hardcoded (couldn't get it working with a shared env file)
 
+A postman collection has been exported, 'waterdrop.postman_collection.json'.
+It contains:
+
+- GET request for retrieving all dogs
+- GET request for retrieving dogs containing provided name
+- POST request for creating a single dog
+
 In case of trouble with the docker containers, there is a 'clear-dockers.sh' script, which will stop and clean everything.
 !!! DANGER !!! It will remove ALL docker containers/volumes/networks/images on the machine.

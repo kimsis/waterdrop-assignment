@@ -1,0 +1,123 @@
+{
+	"info": {
+		"_postman_id": "4985186f-4df1-45a7-b5bc-53413c3cb175",
+		"name": "waterdrop",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6893150"
+	},
+	"item": [
+		{
+			"name": "Get all dogs",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					},
+					{
+						"key": "Authorization",
+						"value": "secret_key",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:9000/api/listDogs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"api",
+						"listDogs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all dogs with 'Nick' in their name",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					},
+					{
+						"key": "Authorization",
+						"value": "secret_key",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "localhost:9000/api/listDogs?name=Nick",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"api",
+						"listDogs"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Nick"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add dog",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					},
+					{
+						"key": "Authorization",
+						"value": "secret_key",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "data",
+							"value": "{\"name\":\"Nicky\",\"breed\":\"dog\"}",
+							"type": "text"
+						},
+						{
+							"key": "breed",
+							"value": "dogBreed",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:9000/api/addDog",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"api",
+						"addDog"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
