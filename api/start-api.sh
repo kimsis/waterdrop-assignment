@@ -1,4 +1,8 @@
-php artisan migrate
+sleep 5 &
+process_id=$!
+wait $process_id
+
+php artisan migrate &
 
 php artisan queue:work &
 
