@@ -4,10 +4,20 @@
       <div>
         <div class="input">
           <label class="input_label" for="dog_name">Dog Name</label>
-          <input class="input_field input_text" id="dog_name" name="dog_name" v-model="dog.name" placeholder="Dog Name">
+          <input
+              class="input_field input_text"
+              id="dog_name"
+              name="dog_name"
+              v-model="dog.name"
+              placeholder="Dog Name"
+              data-testid="name"
+          >
         </div>
         <div class="input">
-          <input class="input_submit input_field" type="submit" value="Get all dogs">
+          <input
+              class="input_submit input_field"
+              type="submit"
+              value="Get all dogs">
         </div>
       </div>
     </form>
@@ -23,7 +33,7 @@
           Data
         </VCol>
       </VRow>
-      <VCol v-for="dog in dogs">
+      <VCol data-testid="dogsList" v-for="dog in dogs">
         <VRow>
           <VCol>
             {{ dog.id }}
@@ -75,7 +85,7 @@
 <script setup>
 import store from "@/stores";
 import {useRouter} from "vue-router";
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 
 const router = useRouter();
 const dog = {
