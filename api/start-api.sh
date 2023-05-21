@@ -1,4 +1,4 @@
-sleep 1 &
+sleep 5 &
 process_id=$!
 wait $process_id
 
