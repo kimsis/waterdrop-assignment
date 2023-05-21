@@ -14,6 +14,8 @@ To do this, navigate to the project folder (/waterdrop-assignment) and run the f
 - $ ./setup_env.sh
 - $ docker-compose up --build -d
 
+Tests can be run on the API, by running 'php artisan test' in the /api folder
+
 No additional setup should be required, as the docker containers equip themselves (I hope).
 
 - The frontend will be available at localhost:8000

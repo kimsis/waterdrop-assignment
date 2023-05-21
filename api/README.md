@@ -6,3 +6,6 @@ The api can be manually started without the docker container as follows
 - close api docker container, if open
 - copy the contents of .env.example into a .env file
 - $ ./start-api.sh
+
+Automated tests can be run via:
+- $ php artisan test
