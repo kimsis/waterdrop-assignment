@@ -13,7 +13,7 @@ describe('Get dogs test', () => {
         createDog(uniqueIdentifier).then((createdDog) => {
             dog = createdDog.body;
         })
-        cy.wait(11000);
+        cy.wait(10000);
     })
 
     it('should list all dogs', function () {

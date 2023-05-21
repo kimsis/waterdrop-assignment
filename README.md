@@ -23,7 +23,20 @@ To do this, navigate to the project folder (/waterdrop-assignment) and run the f
 
 # Testing
 
-Tests can be run on the API, by running 'php artisan test' in the /api folder
+Api tests can be run by:
+- navigating to the /api folder
+- $ php artisan test
+
+Frontend tests can be run by:
+- navigating to the /site folder
+- $ yarn cypress open
+- selecting browser
+- selecting test suite
+
+FE tests can also be run via
+- $ yarn cypress run
+
+This however seems to not always work as expected, and sometimes fails (haven't found out yet why)
 
 # Service Access
 No additional setup should be required, as the docker containers equip themselves.
