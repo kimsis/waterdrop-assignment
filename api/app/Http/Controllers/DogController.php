@@ -32,7 +32,7 @@ class DogController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $data = $request->input('data');
+        $data = $request->get('data');
         $decoded = json_decode($data, true);
         if(is_null($decoded))
         {
