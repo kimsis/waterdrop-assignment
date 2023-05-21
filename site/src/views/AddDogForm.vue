@@ -3,21 +3,65 @@
     <div>
       <div class="input">
         <label class="input_label" for="dog_name">Dog Name</label>
-        <input class="input_field input_text" id="dog_name" name="dog_name" v-model="dogToSave.name" placeholder="Dog Name">
+        <input
+            v-model="dogToSave.name"
+            class="input_field input_text"
+            id="dog_name"
+            name="dog_name"
+            placeholder="Dog Name"
+            data-testid="name"
+        >
       </div>
       <div class="input">
         <label class="input_label" for="dog_breed">Dog Name</label>
-        <input class="input_field input_text" id="dog_breed" name="dog_breed" v-model="dogToSave.breed" placeholder="Dog Breed">
+        <input
+            v-model="dogToSave.breed"
+            class="input_field input_text"
+            id="dog_breed"
+            name="dog_breed"
+            placeholder="Dog Breed"
+            data-testid="breed"
+        >
       </div>
       <div class="input">
         <input class="input_submit input_field" type="submit" value="Add dog">
+      </div>
+      <div :class=messageClass>
+        {{ message }}
       </div>
     </div>
   </form>
 </template>
 
+<script setup>
+import store from "@/stores";
+import {useRouter} from "vue-router";
+import {ref} from "vue";
+
+const router = useRouter();
+const dogToSave = {
+    name: '',
+    breed: '',
+}
+const message = ref('');
+const messageClass= ref('success_message');
+function saveDog() {
+  event.preventDefault()
+  store
+      .dispatch('saveDog', dogToSave)
+      .then((res) => {
+        if(res.data.message) {
+          messageClass.value = 'fail_message';
+          message.value = res.data.message;
+        } else {
+          messageClass.value = 'success_message';
+          message.value = res.data;
+        }
+      })
+}
+</script>
+
 <style>
-@media (min-width: 1024px) {
   .form {
     min-height: 100vh;
     display: flex;
@@ -48,24 +92,12 @@
     padding: 10px 12px;
     text-align: center;
   }
-}
+  .success_message {
+    margin: auto;
+    color: green;
+  }
+  .fail_message {
+    margin: auto;
+    color: red;
+  }
 </style>
-<script setup>
-import store from "@/stores";
-import {useRouter} from "vue-router";
-
-const router = useRouter();
-const dogToSave = {
-  name: '',
-  breed: '',
-}
-function saveDog() {
-  event.preventDefault()
-  console.log(dogToSave)
-  store
-      .dispatch('saveDog', dogToSave)
-      .then((res) => {
-        console.log(res);
-      })
-}
-</script>

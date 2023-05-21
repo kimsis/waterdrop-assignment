@@ -36,14 +36,19 @@ const store = createStore({
             const data = {
                 data: JSON.stringify(dogData)
             };
-            return axios.post('http://localhost:9000/api/addDog', data, {
-                headers: {
-                    "Content-Type": "application/json",
-                    Accept: "application/json",
-                    Authorization: store.state.secretKey,
-                },
-                method: "POST",
-            })
+            try{
+                return axios.post('http://localhost:9000/api/addDog', data, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/json",
+                        Authorization: store.state.secretKey,
+                    },
+                    method: "POST",
+                })
+                    .catch(err => { return err.response } )
+            } catch (axiosError) {
+                return console.log(axiosError);
+            }
         }
     },
     mutations: {},
