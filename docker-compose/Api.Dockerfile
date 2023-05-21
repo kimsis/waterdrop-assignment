@@ -17,15 +17,16 @@ RUN set -ex && apk --no-cache add postgresql-dev
 
 RUN docker-php-ext-install zip pdo pdo_pgsql opcache
 RUN docker-php-ext-enable opcache
+RUN apk add --no-cache pcre-dev $PHPIZE_DEPS \
+        && pecl install redis \
+        && docker-php-ext-enable redis.so
 
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 RUN echo "alias ll='ls -lah'" >> /root/.bashrc
 
-CMD cd var/www/html
-
 CMD composer update
 
-CMD php artisan migrate
+CMD chmod 777 ./start-api.sh
 
-CMD php artisan serve --port 9000
+CMD ./start-api.sh
